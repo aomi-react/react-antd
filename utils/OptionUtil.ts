@@ -35,14 +35,14 @@ export type Options<T> = {
  */
 export function entity2Options<T>(entities: T | Array<T>, options: Options<T> = {}): Array<Option> {
   const result: Array<Option> = [];
-  if (Array.isArray(entities) && entities.length > 0) {
-    entities.forEach((item: any, index) => {
+  if (Array.isArray(entities)) {
+    entities.length > 0 && entities.forEach((item: any, index) => {
       result.push({
         label: options.getLabel ? options.getLabel(item, index) : (item.name || item.label || item.code || index),
         value: options.getValue ? options.getValue(item, index) : (item.id || item.code || item.name || item.value || index)
       });
     });
-  } else if (typeof entities === 'object') {
+  } else if (typeof entities === 'object' && Object.keys(entities).length > 0) {
     const tmp: any = entities;
     result.push({
       label: options.getLabel ? options.getLabel(tmp, 0) : (tmp.name || tmp.label || tmp.code || 0),
