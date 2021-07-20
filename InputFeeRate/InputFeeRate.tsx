@@ -42,12 +42,18 @@ export class InputFeeRate extends Component<InputFeeRateProps, any> {
     if (Reflect.has(nextProps, 'value')) {
       return {
         type: feeRateType.percentage,
-        value: '',
+        value: '0',
         min: 0.00,
         max: 0.00,
         ...nextProps.value
       };
     }
+    return {
+      type: feeRateType.percentage,
+      value: '0',
+      min: 0.00,
+      max: 0.00,
+    };
   }
 
   state;
