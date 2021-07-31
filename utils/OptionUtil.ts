@@ -51,3 +51,14 @@ export function entity2Options<T>(entities: T | Array<T>, options: Options<T> = 
   }
   return result;
 }
+
+
+/**
+ * 查找option中value对应的label值
+ * @param value value
+ * @param options 待查找option数组
+ * @return 返回value对应的label，如果查找不到返回value
+ */
+export function findLabel(value, options: Array<Option> = []) {
+  return options.find(item => item.value === value)?.label || value;
+}
