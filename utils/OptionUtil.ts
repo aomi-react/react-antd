@@ -3,12 +3,14 @@ import { Option } from '../BaseSelect/Option';
 /**
  * 转换一个对象为下拉框所需要的options数组
  * @param obj
+ * @param options 转换配置选项
+ * @param labelAsValue 使用label作为value，一般在autocomplete中使用
  */
-export function obj2Options(obj): Array<Option> {
+export function obj2Options(obj, { labelAsValue = false } = {}): Array<Option> {
   const result: Array<Option> = [];
   obj && Object.keys(obj).forEach(key => result.push({
     label: obj[key],
-    value: key
+    value: labelAsValue ? obj[key] : key
   }));
   return result;
 }
