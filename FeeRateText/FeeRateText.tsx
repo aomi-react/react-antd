@@ -5,7 +5,7 @@ import { FeeRate, feeRateType } from '@aomi/common-service/FeeRate/FeeRate';
 /**
  * 费率展示
  */
-export function FeeRateText({ type, value, min, max, ...props }: FeeRate & DescriptionsProps) {
+export function FeeRateText({ type, value = 0, min = 0, max = 0, ...props }: FeeRate & DescriptionsProps) {
   const unit = type === feeRateType.cap ? '元' : '%';
   return (
     <Descriptions size="small" column={1} {...props}>
