@@ -44,7 +44,7 @@ export function entity2Options<T>(entities: T | Array<T>, options: Options<T> = 
         value: options.getValue ? options.getValue(item, index) : (item.id || item.code || item.name || item.value || index)
       });
     });
-  } else if (typeof entities === 'object' && Object.keys(entities).length > 0) {
+  } else if (typeof entities === 'object' && Object.keys(entities as object).length > 0) {
     const tmp: any = entities;
     result.push({
       label: options.getLabel ? options.getLabel(tmp, 0) : (tmp.name || tmp.label || tmp.code || 0),

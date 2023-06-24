@@ -2,24 +2,39 @@
   "name": "@aomi/react-antd",
   "version": "1.0.0-Alpha.11",
   "main": "index.js",
-  "repository": "git@github.com:aomi-web/react-antd.git",
+  "repository": "git@github.com:aomi-react/react-antd.git",
   "author": "sean <sean.snow@live.com>",
   "license": "MIT",
   "scripts": {
-    "clean": "find . -path \"./node_modules\" -prune -o -name \"*.js\" -o -name \"*.js.map\" -o -name \"*.d.ts\" |xargs rm -f | echo ''",
-    "build": "tsc -d",
+    "clean1": "find . -path \"./node_modules\" -prune -o -name \"*.js\" -o -name \"*.js.map\" -o -name \"*.d.ts\" |xargs rm -f | echo ''",
+    "clean": "rm -rf es lib",
+    "build": "rm -rf es lib && tsc -d && tsc --project tsconfig.cjs.json",
     "watch": "tsc -d && tsc -w",
     "prepublishOnly": "yarn build"
   },
+  "exports": {
+    ".": {
+      "import": "./es/index.js",
+      "types": "./es/index.d.ts",
+      "require": "./lib/index.js"
+    },
+    "./BaseSelect/*": {
+      "import": "./es/BaseSelect/*.js",
+      "types": "./es/BaseSelect/*.d.ts",
+      "require": "./lib/BaseSelect/*.js"
+    },
+    "./utils/*": {
+      "import": "./es/utils/*.js",
+      "types": "./es/utils/*.d.ts",
+      "require": "./lib/utils/*.js"
+    }
+  },
   "devDependencies": {
-    "@aomi/common-service": "^1.0.5-Alpha.2",
-    "@types/react": "^17.0.11",
-    "@types/react-dom": "^17.0.7",
-    "accounting": "^0.4.1",
-    "antd": "^4.15.6",
-    "jsdk": "^1.0.0-Alpha.1",
-    "react": "^17.0.2",
-    "react-dom": "^17.0.2",
-    "typescript": "^4.2.4"
+    "@types/react": "^18.2.14",
+    "@types/react-dom": "^18.2.6",
+    "antd": "^5.6.2",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "typescript": "^5.1.3"
   }
 }
