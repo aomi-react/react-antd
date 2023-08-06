@@ -8,25 +8,30 @@
   "scripts": {
     "clean1": "find . -path \"./node_modules\" -prune -o -name \"*.js\" -o -name \"*.js.map\" -o -name \"*.d.ts\" |xargs rm -f | echo ''",
     "clean": "rm -rf es lib",
-    "build": "rm -rf es lib && tsc -d && tsc --project tsconfig.cjs.json",
+    "build": "rm -rf es lib types && tsc -d && tsc --project tsconfig.cjs.json",
     "watch": "tsc -d && tsc -w",
     "prepublishOnly": "yarn build"
   },
   "exports": {
     ".": {
       "import": "./es/index.js",
-      "types": "./es/index.d.ts",
+      "types": "./types/index.d.ts",
       "require": "./lib/index.js"
     },
-    "./BaseSelect/*": {
-      "import": "./es/BaseSelect/*.js",
-      "types": "./es/BaseSelect/*.d.ts",
-      "require": "./lib/BaseSelect/*.js"
+    "./BaseSelect": {
+      "import": "./es/BaseSelect/index.js",
+      "types": "./types/BaseSelect/index.d.ts",
+      "require": "./lib/BaseSelect/index.js"
     },
-    "./utils/*": {
-      "import": "./es/utils/*.js",
-      "types": "./es/utils/*.d.ts",
-      "require": "./lib/utils/*.js"
+    "./utils/OptionUtil": {
+      "import": "./es/utils/OptionUtil.js",
+      "types": "./types/utils/OptionUtil.d.ts",
+      "require": "./lib/utils/OptionUtil.js"
+    },
+    "./utils": {
+      "import": "./es/utils/index.js",
+      "types": "./types/utils/index.d.ts",
+      "require": "./lib/utils/index.js"
     }
   },
   "devDependencies": {

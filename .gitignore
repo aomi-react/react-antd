@@ -36,6 +36,7 @@ log
 logs
 lib/
 es/
+types/
 target
 _site/
 activemq-data
