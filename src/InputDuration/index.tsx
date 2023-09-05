@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
-import {Input, InputNumber, InputNumberProps, Select, SelectProps} from "antd";
-import {GroupProps} from "antd/es/input/Group";
+import {InputNumber, InputNumberProps, Select, SelectProps, Space} from "antd";
+import {SpaceCompactProps} from "antd/es/space/Compact";
 
 
 export type Unit = 'D' | 'H' | 'M' | 'S'
@@ -15,9 +15,9 @@ export type Duration = {
 
 export type InputDurationProps = {
   /**
-   * group 属性
+   * SpaceCompactProps 属性
    */
-  groupProps?: GroupProps
+  spaceCompactProps?: SpaceCompactProps
 
   /**
    * 数字输入库属性
@@ -42,6 +42,8 @@ export type InputDurationProps = {
    * @param value
    */
   onChange?: (value: string) => void
+
+  [key: string]: any
 };
 
 const options: SelectProps['options'] = [
@@ -92,7 +94,17 @@ export function toDurationString(number: number, unit: Unit): string {
 }
 
 export function InputDuration(props: InputDurationProps) {
-  const {value, onChange, defaultValue, unit: defaultUnit, groupProps, inputNumberProps, selectProps} = props;
+  const {
+    value,
+    onChange,
+    defaultValue,
+    unit: defaultUnit,
+    spaceCompactProps,
+    inputNumberProps,
+    selectProps,
+    disabled,
+    className,
+  } = props;
 
   let initNumber = 1, initUnit = defaultUnit ?? 'D';
   if (typeof value === 'string') {
@@ -106,27 +118,45 @@ export function InputDuration(props: InputDurationProps) {
   const [number, setNumber] = useState(initNumber)
   const [unit, setUnit] = useState(initUnit)
 
-  const triggerChange = () => {
+  const triggerChange = (changeValue: any) => {
     // Should provide an event to pass value to Form.
     if (onChange) {
-      onChange(toDurationString(number, unit));
+      const n = changeValue?.number ?? number;
+      const u = changeValue?.unit ?? unit;
+      onChange(toDurationString(n, u));
     }
   };
 
   function handleNumberChange(number: number) {
     setNumber(number);
-    triggerChange()
+    triggerChange({
+      number
+    })
   }
 
   function handleUnitChange(u: Unit) {
     setUnit(u)
-    triggerChange()
+    triggerChange({
+      unit: u
+    })
   }
 
   return (
-    <Input.Group compact {...groupProps}>
-      <InputNumber step={1} defaultValue={1} {...inputNumberProps} value={number} onChange={handleNumberChange}/>
-      <Select options={options} {...selectProps} value={unit} onChange={handleUnitChange}/>
-    </Input.Group>
+    <Space.Compact className={className} {...spaceCompactProps}>
+      <InputNumber step={1} defaultValue={1}
+                   style={{width: '75%'}}
+                   {...inputNumberProps}
+                   value={number}
+                   onChange={handleNumberChange}
+                   disabled={disabled}
+      />
+      <Select options={options}
+              style={{width: '25%'}}
+              {...selectProps}
+              value={unit}
+              onChange={handleUnitChange}
+              disabled={disabled}
+      />
+    </Space.Compact>
   )
 }
