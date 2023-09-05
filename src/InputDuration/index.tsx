@@ -106,7 +106,7 @@ export function InputDuration(props: InputDurationProps) {
     className,
   } = props;
 
-  let initNumber = 1, initUnit = defaultUnit ?? 'D';
+  let initNumber: any = undefined, initUnit = defaultUnit ?? 'D';
   if (typeof value === 'string') {
     const v = parseDurationString(value);
     initNumber = v[initUnit];
