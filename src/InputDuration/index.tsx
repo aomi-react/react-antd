@@ -143,7 +143,7 @@ export function InputDuration(props: InputDurationProps) {
 
   return (
     <Space.Compact className={className} {...spaceCompactProps}>
-      <InputNumber step={1} defaultValue={1}
+      <InputNumber step={1}
                    style={{width: '75%'}}
                    {...inputNumberProps}
                    value={number}
