@@ -23,7 +23,7 @@
       "types": "./types/BaseSelect/*.d.ts",
       "require": "./lib/BaseSelect/*.js"
     },
-    "./InputDuration": {
+    "./InputDuration/*": {
       "import": "./es/InputDuration/*.js",
       "types": "./types/InputDuration/*.d.ts",
       "require": "./lib/InputDuration/*.js"
