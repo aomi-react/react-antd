@@ -1,9 +1,12 @@
 import React, {useState} from 'react';
 import {InputNumber, InputNumberProps, Select, SelectProps, Space} from "antd";
 import {SpaceCompactProps} from "antd/es/space/Compact";
+import dayjs from "dayjs";
+import * as duration from 'dayjs/plugin/duration'
 
+dayjs.extend(duration as any)
 
-export type Unit = 'D' | 'H' | 'M' | 'S'
+export type Unit = 'days' | 'weeks' | 'months' | 'years' | 'hours' | 'minutes' | 'seconds' | 'milliseconds'
 
 export type Duration = {
   value?: number | string,
@@ -49,40 +52,30 @@ export type InputDurationProps = {
 const options: SelectProps['options'] = [
   {
     label: '天',
-    value: 'D'
+    value: 'days'
+  }, {
+    label: '周',
+    value: 'weeks'
+  }, {
+    label: '月',
+    value: 'months'
+  }, {
+    label: '年',
+    value: 'years'
   }, {
     label: '时',
-    value: 'H'
+    value: 'hours'
   }, {
     label: '分',
-    value: 'M'
+    value: 'minutes'
   }, {
     label: '秒',
-    value: 'S'
+    value: 'seconds'
+  }, {
+    label: '毫秒',
+    value: 'milliseconds'
   }
 ]
-
-export function parseDurationString(durationString: string): Record<string, number> {
-  // 使用正则表达式匹配 Java Duration 字符串的格式
-  const regex = /^PT(?:(\d+)D)?(?:(\d+)H)?(?:(\d+)M)?(?:(\d+)S)?$/;
-  const match = durationString.match(regex);
-
-  if (!match) {
-    // 如果字符串格式不匹配，返回 null 或抛出错误，具体取决于您的需求
-    return {};
-  }
-  // 从匹配结果中提取各个部分的值
-  const D = match[1] ? parseInt(match[1], 10) : 0;
-  const H = match[2] ? parseInt(match[2], 10) : 0;
-  const M = match[3] ? parseInt(match[3], 10) : 0;
-  const S = match[4] ? parseInt(match[4], 10) : 0;
-  return {
-    D,
-    H,
-    M,
-    S
-  }
-}
 
 /**
  * 转换成字符串
@@ -108,11 +101,11 @@ export function InputDuration(props: InputDurationProps) {
 
   let initNumber: any = undefined, initUnit = defaultUnit ?? 'D';
   if (typeof value === 'string') {
-    const v = parseDurationString(value);
-    initNumber = v[initUnit];
+    const v = dayjs.duration(value);
+    initNumber = v[initUnit]();
   } else if (typeof defaultValue === 'string') {
-    const v = parseDurationString(defaultValue);
-    initNumber = v[initUnit];
+    const v = dayjs.duration(defaultValue);
+    initNumber = v[initUnit]();
   }
 
   const [number, setNumber] = useState(initNumber)
@@ -123,7 +116,7 @@ export function InputDuration(props: InputDurationProps) {
     if (onChange) {
       const n = changeValue?.number ?? number;
       const u = changeValue?.unit ?? unit;
-      onChange(toDurationString(n, u));
+      onChange(dayjs.duration(n, u).toISOString());
     }
   };
 
