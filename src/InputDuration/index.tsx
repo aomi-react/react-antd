@@ -38,7 +38,7 @@ export type InputDurationProps = {
   /**
    * 单位
    */
-  unit?: Unit
+  defaultUnit?: Unit
 
   /**
    * 值变更
@@ -77,13 +77,39 @@ const options: SelectProps['options'] = [
   }
 ]
 
+export const units: Unit[] = ['years', 'months', 'weeks', 'days', 'hours', 'minutes', 'seconds', 'milliseconds']
+
+const transform: Record<Unit, string> = {
+  days: "asDays",
+  hours: "asHours",
+  milliseconds: "asMilliseconds",
+  minutes: "asMinutes",
+  months: "asMonths",
+  seconds: "asSeconds",
+  weeks: "asWeeks",
+  years: "asYears"
+}
+
+/**
+ *
+ * @param value
+ */
+export function parse(value: string): [number, Unit] {
+  const v = dayjs.duration(value);
+  const unit = units.find(key => {
+    return 0 != v[key]?.();
+  }) ?? 'days'
+
+  return [v[transform[unit]]?.(), unit]
+}
+
 /**
  * 转换成字符串
  * @param number 数字
  * @param unit 单位
  */
 export function toDurationString(number: number, unit: Unit): string {
-  return `PT${number}${unit}`
+  return dayjs.duration(number, unit).toISOString();
 }
 
 export function InputDuration(props: InputDurationProps) {
@@ -91,7 +117,7 @@ export function InputDuration(props: InputDurationProps) {
     value,
     onChange,
     defaultValue,
-    unit: defaultUnit,
+    defaultUnit,
     spaceCompactProps,
     inputNumberProps,
     selectProps,
@@ -99,13 +125,15 @@ export function InputDuration(props: InputDurationProps) {
     className,
   } = props;
 
-  let initNumber: any = undefined, initUnit = defaultUnit ?? 'D';
+  let initNumber: any = undefined, initUnit = defaultUnit ?? 'days';
   if (typeof value === 'string') {
-    const v = dayjs.duration(value);
-    initNumber = v[initUnit]();
+    const [v, u] = parse(value);
+    initNumber = v
+    initUnit = u
   } else if (typeof defaultValue === 'string') {
-    const v = dayjs.duration(defaultValue);
-    initNumber = v[initUnit]();
+    const [v, u] = parse(defaultValue);
+    initNumber = v
+    initUnit = u
   }
 
   const [number, setNumber] = useState(initNumber)
@@ -116,7 +144,7 @@ export function InputDuration(props: InputDurationProps) {
     if (onChange) {
       const n = changeValue?.number ?? number;
       const u = changeValue?.unit ?? unit;
-      onChange(dayjs.duration(n, u).toISOString());
+      onChange(toDurationString(n, u));
     }
   };
 
