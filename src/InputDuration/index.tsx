@@ -160,8 +160,11 @@ export function InputDuration(props: InputDurationProps) {
   }
 
   function handleUnitChange(u: Unit) {
+    const newNumber = number ? dayjs.duration(number, unit)[transform[u]]() : number;
+    setNumber(newNumber);
     setUnit(u)
     triggerChange({
+      number: newNumber,
       unit: u
     })
   }
