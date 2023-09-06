@@ -97,7 +97,7 @@ const transform: Record<Unit, string> = {
 export function parse(value: string): [number, Unit] {
   const v = dayjs.duration(value);
   const unit = units.find(key => {
-    return 0 != v[key]?.();
+    return 0 != v['$d'][key];
   }) ?? 'days'
 
   return [v[transform[unit]]?.(), unit]
