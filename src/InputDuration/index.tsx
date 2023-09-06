@@ -44,7 +44,7 @@ export type InputDurationProps = {
    * 值变更
    * @param value
    */
-  onChange?: (value: string) => void
+  onChange?: (value?: string) => void
 
   [key: string]: any
 };
@@ -144,7 +144,11 @@ export function InputDuration(props: InputDurationProps) {
     if (onChange) {
       const n = changeValue?.number ?? number;
       const u = changeValue?.unit ?? unit;
-      onChange(toDurationString(n, u));
+      if (n) {
+        onChange(toDurationString(n, u));
+      } else {
+        onChange(undefined);
+      }
     }
   };
 
