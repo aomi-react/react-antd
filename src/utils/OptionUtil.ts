@@ -1,4 +1,4 @@
-import { Option } from '../BaseSelect/Option';
+import {Option} from '../BaseSelect/Option';
 
 /**
  * 转换一个对象为下拉框所需要的options数组
@@ -6,11 +6,11 @@ import { Option } from '../BaseSelect/Option';
  * @param options 转换配置选项
  * @param labelAsValue 使用label作为value，一般在autocomplete中使用
  */
-export function obj2Options(obj, { labelAsValue = false } = {}): Array<Option> {
+export function obj2Options(obj, {labelAsValue = false} = {}): Array<Option> {
   const result: Array<Option> = [];
   obj && Object.keys(obj).forEach(key => result.push({
     label: obj[key],
-    value: labelAsValue ? obj[key] : key
+    value: labelAsValue ? obj[key] : key,
   }));
   return result;
 }
@@ -30,25 +30,31 @@ export type Options<T> = {
   getValue?: (entity: T, index: number) => string
 }
 
+export type EntityOption<T> = Option & {
+  entity: T
+}
+
 /**
  * 转换后端的实体对象为下拉框所需要的options数组
  * @param entities 后端实体对象
  * @param options 转换时选项参数
  */
-export function entity2Options<T>(entities: T | Array<T>, options: Options<T> = {}): Array<Option> {
-  const result: Array<Option> = [];
+export function entity2Options<T>(entities: T | Array<T>, options: Options<T> = {}): Array<EntityOption<T>> {
+  const result:Array<EntityOption<T>> = [];
   if (Array.isArray(entities)) {
     entities.length > 0 && entities.forEach((item: any, index) => {
       result.push({
         label: options.getLabel ? options.getLabel(item, index) : (item.name || item.label || item.code || index),
-        value: options.getValue ? options.getValue(item, index) : (item.id || item.code || item.name || item.value || index)
+        value: options.getValue ? options.getValue(item, index) : (item.id || item.code || item.name || item.value || index),
+        entity: item
       });
     });
   } else if (typeof entities === 'object' && Object.keys(entities as object).length > 0) {
     const tmp: any = entities;
     result.push({
       label: options.getLabel ? options.getLabel(tmp, 0) : (tmp.name || tmp.label || tmp.code || 0),
-      value: options.getValue ? options.getValue(tmp, 0) : (tmp.id || tmp.code || tmp.name || tmp.value || 0)
+      value: options.getValue ? options.getValue(tmp, 0) : (tmp.id || tmp.code || tmp.name || tmp.value || 0),
+      entity: tmp as T
     });
   }
   return result;
