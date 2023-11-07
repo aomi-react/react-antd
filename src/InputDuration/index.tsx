@@ -109,7 +109,8 @@ export function parse(value: string): [number, Unit] {
  * @param unit 单位
  */
 export function toDurationString(number: number, unit: Unit): string {
-  return dayjs.duration(number, unit).toISOString();
+  // return dayjs.duration(number, unit).toISOString();
+  return `PT${dayjs.duration(number, unit).asHours()}H`;
 }
 
 export function InputDuration(props: InputDurationProps) {
